@@ -5,18 +5,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Файл для хранения уже обработанных задач
-processed_tasks_file = 'links.txt'
+# Глобальный список для хранения уже обработанных задач
+processed_tasks = set()
 
 def load_processed_tasks():
-    if os.path.exists(processed_tasks_file):
-        with open(processed_tasks_file, 'r') as file:
-            return set(file.read().splitlines())
-    return set()
+    # Теперь просто возвращаем глобальный список
+    return processed_tasks
 
 def save_processed_task(task_link):
-    with open(processed_tasks_file, 'a') as file:
-        file.write(task_link + '\n')
+    # Добавляем задачу в глобальный список
+    processed_tasks.add(task_link)
 
 def parse_habr_freelance():
     url = "https://freelance.habr.com/tasks?categories=development_bots,development_scripts,testing_sites,testing_mobile,testing_software,other_audit_analytics,other_consulting,other_jurisprudence,other_accounting,other_audio,other_video,other_engineering,other_other"
@@ -49,8 +47,9 @@ def parse_habr_freelance():
         published_tag = task.find('span', class_='params__published-at icon_task_publish_at')
         published_date = published_tag.text.strip() if published_tag else 'Н/Д'
 
-        price_tag = task.find('div', class_='task__column_price')
-        price = price_tag.find('span', class_='count').text.strip() if price_tag else 'Н/Д'
+        # Use the provided CSS selector to find the price
+        price_tag = task.select_one('li.content-list__item:nth-child(1) > article:nth-child(1) > aside:nth-child(2) > div:nth-child(1) > span')
+        price = price_tag.text.strip() if price_tag else 'Н/Д'
 
         message = (f"Название: {title}\n"
                    f"{link}\n"
