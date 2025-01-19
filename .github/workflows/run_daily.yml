@@ -2,7 +2,7 @@ name: Daily FRI Bot
 
 on:
     schedule:
-        - cron: '*/5 * * * *'
+        - cron: '*/18 * * * *'
 
 env:
   TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
