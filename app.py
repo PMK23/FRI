@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Файл для хранения уже обработанных задач
-processed_tasks_file = 'processed_tasks.txt'
+processed_tasks_file = 'links.txt'
 
 def load_processed_tasks():
     if os.path.exists(processed_tasks_file):
